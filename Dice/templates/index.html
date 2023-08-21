@@ -159,94 +159,116 @@
     </div>
   </body>
   <script>
-    function rollDice() {
-      var diceFaces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
-      var dice1 = Math.floor(Math.random() * 6);
-      var dice2 = Math.floor(Math.random() * 6);
-      var dice3 = Math.floor(Math.random() * 6);
+    class DiceGame {
+      constructor() {
+        this.diceFaces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
+      }
 
-      document.getElementById("dice1").textContent = diceFaces[dice1];
-      document.getElementById("dice2").textContent = diceFaces[dice2];
-      document.getElementById("dice3").textContent = diceFaces[dice3];
+      rollDice() {
+        var dice1 = Math.floor(Math.random() * 6);
+        var dice2 = Math.floor(Math.random() * 6);
+        var dice3 = Math.floor(Math.random() * 6);
 
-      var sum = dice1 + dice2 + dice3 + 3; // +3 because diceFaces is 0-indexed
-      document.getElementById("sum").textContent = "Sum: " + sum;
-      document.getElementById("sum").classList.add("sum-row"); // Add the sum-row class
+        document.getElementById("dice1").textContent = this.diceFaces[dice1];
+        document.getElementById("dice2").textContent = this.diceFaces[dice2];
+        document.getElementById("dice3").textContent = this.diceFaces[dice3];
 
-      // Save the sum to the Flask API
-      fetch("/save", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ sum: sum }),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("HTTP error " + response.status);
-          }
-          return response.json();
+        var sum = dice1 + dice2 + dice3 + 3; // +3 because diceFaces is 0-indexed
+        document.getElementById("sum").textContent = "Sum: " + sum;
+        document.getElementById("sum").classList.add("sum-row"); // Add the sum-row class
+
+        // Save the sum to the Flask API
+        this.saveSum(sum);
+      }
+
+      saveSum(sum) {
+        fetch("/save", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ sum: sum }),
         })
-        .then((json) => console.log(json))
-        .catch(function () {
-          console.log("Error occurred while fetching /save");
-        });
-    }
-
-    function getSums() {
-      fetch("/get")
-        .then((response) => response.json())
-        .then((data) => {
-          var sumsContainer = document.getElementById("sums-container");
-          sumsContainer.innerHTML = ""; // Clear the container
-          data.forEach((record, index) => {
-            var row = document.createElement("div");
-            row.textContent = record.Sum;
-            row.className = "sum-row"; // Add a CSS class to the row
-            sumsContainer.appendChild(row);
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("HTTP error " + response.status);
+            }
+            return response.json();
+          })
+          .then((json) => console.log(json))
+          .catch(function () {
+            console.log("Error occurred while fetching /save");
           });
-        });
-    }
+      }
 
-    function getPercentages() {
-      fetch("/percentage")
-        .then((response) => response.json())
-        .then((data) => {
-          var recordBoard = document.getElementById("record-board");
-          recordBoard.innerHTML = ""; // Clear the record board
-
-          // Create and append the title
-          var title = document.createElement("h2");
-          title.textContent = "Record Board";
-          recordBoard.appendChild(title);
-
-          var proportions = data[0].proportions;
-          for (var sum in proportions) {
-            var row = document.createElement("div");
-            var percentage = (proportions[sum] * 100).toFixed(2); // Convert to percentage
-            row.textContent = "Sum " + sum + ": " + percentage + "%";
-            recordBoard.appendChild(row);
-          }
-
-          // Fetch the data from the /bigsmall endpoint and append it to the record board
-          fetch("/bigsmall")
-            .then((response) => response.json())
-            .then((data) => {
-              var proportions = data[0].proportions;
-              for (var type in proportions) {
-                var row = document.createElement("div");
-                var percentage = (proportions[type] * 100).toFixed(2); // Convert to percentage
-                row.textContent = type + ": " + percentage + "%";
-                recordBoard.appendChild(row);
-              }
+      getSums() {
+        fetch("/get")
+          .then((response) => response.json())
+          .then((data) => {
+            var sumsContainer = document.getElementById("sums-container");
+            sumsContainer.innerHTML = ""; // Clear the container
+            data.forEach((record, index) => {
+              var row = document.createElement("div");
+              row.textContent = record.Sum;
+              row.className = "sum-row"; // Add a CSS class to the row
+              sumsContainer.appendChild(row);
             });
-        });
+          });
+      }
+
+      getPercentages() {
+        fetch("/percentage")
+          .then((response) => response.json())
+          .then((data) => {
+            var recordBoard = document.getElementById("record-board");
+            recordBoard.innerHTML = ""; // Clear the record board
+
+            // Create and append the title
+            var title = document.createElement("h2");
+            title.textContent = "Record Board";
+            recordBoard.appendChild(title);
+
+            var proportions = data[0].proportions;
+            for (var sum in proportions) {
+              var row = document.createElement("div");
+              var percentage = (proportions[sum] * 100).toFixed(2); // Convert to percentage
+              row.textContent = "Sum " + sum + ": " + percentage + "%";
+              recordBoard.appendChild(row);
+            }
+
+            // Fetch the data from the /bigsmall endpoint and append it to the record board
+            this.getBigSmall();
+          });
+      }
+
+      getBigSmall() {
+        fetch("/bigsmall")
+          .then((response) => response.json())
+          .then((data) => {
+            var recordBoard = document.getElementById("record-board");
+            var proportions = data[0].proportions;
+            for (var type in proportions) {
+              var row = document.createElement("div");
+              var percentage = (proportions[type] * 100).toFixed(2); // Convert to percentage
+              row.textContent = type + ": " + percentage + "%";
+              recordBoard.appendChild(row);
+            }
+          });
+      }
     }
+
+    // Create a new instance of the game
+    var game = new DiceGame();
 
     // Call getPercentages every second to keep the record board up to date
-    setInterval(getPercentages, 5000);
+    setInterval(() => game.getPercentages(), 1000);
 
     // Call getSums every second to keep the displayed sums up to date
-    setInterval(getSums, 1000);
+    setInterval(() => game.getSums(), 1000);
+
+    // Attach the rollDice method to the button
+    document
+      .querySelector("button")
+      .addEventListener("click", () => game.rollDice());
   </script>
 </html>
