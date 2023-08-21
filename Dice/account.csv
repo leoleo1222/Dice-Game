@@ -1,2 +1,2 @@
-username,password
-leo,pbkdf2:sha256:600000$dYDzQOOCmqKsgTl2$59e89e7b15aaa368fd22768ae6d7eb1da85408ff517b1dfbabe46dc8d4cef324
+username,password,amount
+leo,pbkdf2:sha256:600000$PmIUqps9phhVDs5h$7ab5b43f9f8225eb8ec5c053e63dbcc843e95c42c1f3fe3e664fc64388914ca8,0.0

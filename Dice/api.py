@@ -35,12 +35,34 @@ def register():
         if df[df['username'] == username].shape[0] > 0:
             return jsonify({'message': 'Username already exists'}), 400
         # If the username doesn't exist, append the new account
-        df = df._append({'username': username, 'password': hashed_password}, ignore_index=True)
+        df = df._append({'username': username, 'password': hashed_password, 'amount': 0}, ignore_index=True)
     else:
         # If the file doesn't exist, create a new DataFrame
-        df = pd.DataFrame({'username': [username], 'password': [hashed_password]})
+        df = pd.DataFrame({'username': [username], 'password': [hashed_password], 'amount': [0]})
     df.to_csv(account_file, index=False)
     return jsonify({'message': 'Account created successfully'}), 200
+
+
+@app.route('/add_amount', methods=['POST'])
+def add_amount():
+    data = request.get_json(force=True)
+
+    username = data.get('username')
+    amount = data.get('amount')
+
+    if os.path.exists(account_file):
+        df = pd.read_csv(account_file)
+        # Check if the username exists
+        if df[df['username'] == username].shape[0] > 0:
+            # Add the amount to the user's account
+            df.loc[df['username'] == username, 'amount'] += amount
+        else:
+            return jsonify({'message': 'Username does not exist'}), 400
+    else:
+        return jsonify({'message': 'No users registered'}), 400
+
+    df.to_csv(account_file, index=False)
+    return jsonify({'message': 'Amount added successfully'}), 200
 
 
 @app.route('/login', methods=['POST'])

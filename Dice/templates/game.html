@@ -19,7 +19,7 @@
       }
 
       #record-board {
-        width: 300px;
+        width: 280px;
         height: 580px;
         background-color: #8b8b8b; /* Same grey as the Game Boy */
         border: 10px solid #333333; /* Same border as the Game Boy */
@@ -56,7 +56,7 @@
       }
 
       #gameboy {
-        width: 300px;
+        width: 280px;
         height: 580px;
         background-color: #8b8b8b; /* Game Boy grey */
         border: 10px solid #333333; /* Game Boy border */
@@ -137,10 +137,27 @@
         text-shadow: 2px 2px #000000; /* Text shadow */
         font-family: "Press Start 2P", cursive; /* Retro video game font */
       }
+      #userinfo {
+        width: 300px;
+        height: 580px;
+        background-color: #8b8b8b; /* Same grey as the Game Boy */
+        border: 10px solid #333333; /* Same border as the Game Boy */
+        border-radius: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start; /* Align items at the start of the cross axis (top for column direction) */
+        font-family: "Press Start 2P", cursive; /* Retro video game font */
+        color: #4caf50; /* Same green as the Game Boy */
+        text-shadow: 2px 2px #000000; /* Text shadow */
+        font-size: 20px;
+        margin-right: 50px; /* Add some space between the userinfo and the Game Boy */
+        padding: 20px; /* Add some padding to move the text away from the edge */
+      }
     </style>
   </head>
   <body>
     <div id="container">
+      <div id="userinfo"></div>
       <div id="gameboy">
         <div id="sum"></div>
         <div id="screen">
@@ -158,6 +175,10 @@
       </div>
     </div>
   </body>
+  <script>
+    document.getElementById("userinfo").textContent =
+      localStorage.getItem("username");
+  </script>
   <script>
     class DiceGame {
       constructor() {

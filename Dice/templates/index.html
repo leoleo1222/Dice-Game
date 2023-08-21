@@ -159,7 +159,9 @@
             .then((response) => response.json())
             .then((data) => {
               console.log(data);
-              showMessage(data.message);
+              localStorage.setItem('username', username);
+              showMessage(data.message);     
+              window.location.href = '/game';         
             })
             .catch((error) => {
               console.error("Error:", error);
@@ -184,7 +186,9 @@
             .then((response) => response.json())
             .then((data) => {
               console.log(data);
+              localStorage.setItem('username', username);
               showMessage(data.message);
+              window.location.href = '/game';         
             })
             .catch((error) => {
               console.error("Error:", error);
