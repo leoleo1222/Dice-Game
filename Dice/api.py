@@ -35,10 +35,10 @@ def register():
         if df[df['username'] == username].shape[0] > 0:
             return jsonify({'message': 'Username already exists'}), 400
         # If the username doesn't exist, append the new account
-        df = df._append({'username': username, 'password': hashed_password, 'amount': 0}, ignore_index=True)
+        df = df._append({'username': username, 'password': hashed_password, 'amount': 100}, ignore_index=True)
     else:
         # If the file doesn't exist, create a new DataFrame
-        df = pd.DataFrame({'username': [username], 'password': [hashed_password], 'amount': [0]})
+        df = pd.DataFrame({'username': [username], 'password': [hashed_password], 'amount': [100]})
     df.to_csv(account_file, index=False)
     return jsonify({'message': 'Account created successfully'}), 200
 

@@ -1,0 +1,285 @@
+#container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#gameboy {
+  /* Adjust the width and height as needed */
+  margin-right: 50px; /* Add some space between the Game Boy and the record board */
+}
+
+#record-board {
+  width: 280px;
+  height: 580px;
+  background-color: #8b8b8b; /* Same grey as the Game Boy */
+  border: 10px solid #333333; /* Same border as the Game Boy */
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  font-family: "Press Start 2P", cursive; /* Same font as the Game Boy */
+  color: #4caf50; /* Same green as the Game Boy */
+  text-shadow: 2px 2px #000000; /* Same text shadow as the Game Boy */
+}
+
+#record-board h2 {
+  margin-bottom: 20px; /* Add some space below the title */
+}
+
+#record-board div {
+  margin-bottom: 10px; /* Add some space between the rows */
+}
+
+.first-row {
+  background-color: yellow;
+}
+
+.login-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    width: 300px;
+  }
+
+  .login-container h2 {
+    margin: 0 0 20px 0;
+    text-align: center;
+  }
+
+  .login-container form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .login-container input {
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+  }
+
+  .login-container button {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #4267b2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .login-container button[type="submit"] {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #4caf50; /* Green background */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .login-container button[type="submit"]:hover {
+    background-color: #45a049; /* Darker green when hovered */
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .button-container button {
+    flex: 1;
+    margin-right: 10px;
+  }
+
+  .button-container button:last-child {
+    margin-right: 0;
+  }
+
+  #modal {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  #modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+  }
+
+  #modal-close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  #modal-close:hover,
+  #modal-close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  
+  #gameboy {
+    width: 280px;
+    height: 580px;
+    background-color: #8b8b8b; /* Game Boy grey */
+    border: 10px solid #333333; /* Game Boy border */
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+
+  #screen {
+    width: 90%;
+    height: 50%;
+    background-color: #c3c3c3; /* Screen grey */
+    border: 3px solid #000000; /* Screen border */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  #dice-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 50%;
+  }
+
+  .dice {
+    width: 50px;
+    height: 50px;
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 130px;
+    border: none;
+  }
+
+  button {
+    margin: 20px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4caf50; /* Green background */
+    color: white; /* White text */
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #45a049; /* Darker green when hovered */
+  }
+
+  #sums-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    margin-bottom: 20px;
+  }
+
+  .sum-row {
+    width: 100%;
+    height: 30px;
+    background-color: #c3c3c3; /* Screen grey */
+    border: 1px solid #000000; /* Screen border */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+    font-size: 20px;
+    color: #4caf50; /* Green text */
+    text-shadow: 2px 2px #000000; /* Text shadow */
+    font-family: "Press Start 2P", cursive; /* Retro video game font */
+  }
+  #userinfo {
+    width: 300px;
+    height: 580px;
+    background-color: #8b8b8b; /* Same grey as the Game Boy */
+    border: 10px solid #333333; /* Same border as the Game Boy */
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Align items at the center of the cross axis */
+    font-family: "Press Start 2P", cursive; /* Retro video game font */
+    color: #4caf50; /* Same green as the Game Boy */
+    text-shadow: 2px 2px #000000; /* Text shadow */
+    font-size: 20px;
+    margin-right: 50px; /* Add some space between the userinfo and the Game Boy */
+    gap: 10px; /* Add some space between the input fields and the button */
+    padding: 20px;
+  }
+  #userinfo input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  #userinfo button {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  #userinfo button:hover {
+    background-color: #45a049;
+  }
+
+  .chip {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+  }
+
+  #betting-chips {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  #chip1 {
+    background-color: #ff0000; /* Red */
+  }
+  
+  #chip5 {
+    background-color: #00ff00; /* Green */
+  }
+  
+  #chip10 {
+    background-color: #0000ff; /* Blue */
+  }
