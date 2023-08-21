@@ -283,3 +283,40 @@
   #chip10 {
     background-color: #0000ff; /* Blue */
   }
+
+  #betting-choices {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .choice {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .choice.selected {
+    border-color: red;
+  }
+  
+  #bet-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  #bet-button:hover {
+    background-color: #45a049;
+  }
+
+  .selected {
+    border-color: red;
+  }
