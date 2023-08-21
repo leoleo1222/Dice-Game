@@ -297,6 +297,11 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     cursor: pointer;
+    white-space: nowrap; /* Prevent the text from wrapping */
+    overflow: auto; /* Hide the overflow */
+    font-size: 0.8em; /* Smaller font size */
+    width: 80px; /* Fixed width */
+    text-align: center; /* Center the text */
   }
   
   .choice.selected {

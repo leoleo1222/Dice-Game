@@ -1,309 +1,336 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+      }
+    </style>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}" />
-  <style>
-    body {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-    }
-  </style>
-</head>
+  <body>
+    <div id="modal" style="display: none">
+      <div id="modal-content">
+        <span id="modal-close">&times;</span>
+        <p id="modal-message"></p>
+      </div>
+    </div>
+    <div id="container">
+      <div id="userinfo">
+        <div id="username"></div>
+        <div id="user-money"></div>
+        <div id="betting-chips">
+          <div class="chip" id="chip1" onclick="selectChip(1)">1</div>
+          <div class="chip" id="chip5" onclick="selectChip(5)">5</div>
+          <div class="chip" id="chip10" onclick="selectChip(10)">10</div>
+        </div>
+        <div id="betting-choices">
+          <div class="choice" data-choice="Big" onclick="selectChoice('Big')">Big (1:2)</div>
+          <div class="choice" data-choice="Small" onclick="selectChoice('Small')">Small (1:2)</div>
+          <div class="choice" data-choice="4" onclick="selectChoice(4)">4 (1:50)</div>
+          <div class="choice" data-choice="5" onclick="selectChoice(5)">5 (1:18)</div>
+          <div class="choice" data-choice="6" onclick="selectChoice(6)">6 (1:14)</div>
+          <div class="choice" data-choice="7" onclick="selectChoice(7)">7 (1:12)</div>
+          <div class="choice" data-choice="8" onclick="selectChoice(8)">8 (1:8)</div>
+          <div class="choice" data-choice="9" onclick="selectChoice(9)">9 (1:6)</div>
+          <div class="choice" data-choice="10" onclick="selectChoice(10)">10 (1:6)</div>
+          <div class="choice" data-choice="11" onclick="selectChoice(11)">11 (1:6)</div>
+          <div class="choice" data-choice="12" onclick="selectChoice(12)">12 (1:6)</div>
+          <div class="choice" data-choice="13" onclick="selectChoice(13)">13 (1:8)</div>
+          <div class="choice" data-choice="14" onclick="selectChoice(14)">14 (1:12)</div>
+          <div class="choice" data-choice="15" onclick="selectChoice(15)">15 (1:14)</div>
+          <div class="choice" data-choice="16" onclick="selectChoice(16)">16 (1:18)</div>
+          <div class="choice" data-choice="17" onclick="selectChoice(17)">17 (1:50)</div>
+        </div>
+        <button id="bet-button" onclick="placeBet()">Bet</button>
+      </div>
+      <div id="gameboy">
+        <div id="sum"></div>
+        <div id="screen">
+          <div id="dice-container">
+            <div class="dice" id="dice1"></div>
+            <div class="dice" id="dice2"></div>
+            <div class="dice" id="dice3"></div>
+          </div>
+        </div>
+        <div id="sums-container"></div>
+      </div>
+      <div id="record-board">
+        <h2>Record Board</h2>
+      </div>
+    </div>
+  </body>
+  <script>
+    let selectedChip = null;
+    let selectedChoice = null;
 
-<body>
-  <div id="modal" style="display: none">
-    <div id="modal-content">
-      <span id="modal-close">&times;</span>
-      <p id="modal-message"></p>
-    </div>
-  </div>
-  <div id="container">
-    <div id="userinfo">
-      <div id="username"></div>
-      <div id="user-money"></div>
-      <div id="betting-chips">
-        <div class="chip" id="chip1" onclick="selectChip(1)">1</div>
-        <div class="chip" id="chip5" onclick="selectChip(5)">5</div>
-        <div class="chip" id="chip10" onclick="selectChip(10)">10</div>
-      </div>
-      <div id="betting-choices">
-        <div class="choice" data-choice="Big" onclick="selectChoice('Big')">
-          Big
-        </div>
-        <div class="choice" data-choice="Small" onclick="selectChoice('Small')">
-          Small
-        </div>
-        <div class="choice" data-choice="4" onclick="selectChoice(4)">4</div>
-        <div class="choice" data-choice="5" onclick="selectChoice(5)">5</div>
-        <div class="choice" data-choice="6" onclick="selectChoice(6)">6</div>
-        <div class="choice" data-choice="7" onclick="selectChoice(7)">7</div>
-        <div class="choice" data-choice="8" onclick="selectChoice(8)">8</div>
-        <div class="choice" data-choice="9" onclick="selectChoice(9)">9</div>
-        <div class="choice" data-choice="10" onclick="selectChoice(10)">
-          10
-        </div>
-        <div class="choice" data-choice="11" onclick="selectChoice(11)">
-          11
-        </div>
-        <div class="choice" data-choice="12" onclick="selectChoice(12)">
-          12
-        </div>
-        <div class="choice" data-choice="13" onclick="selectChoice(13)">
-          13
-        </div>
-        <div class="choice" data-choice="14" onclick="selectChoice(14)">
-          14
-        </div>
-        <div class="choice" data-choice="15" onclick="selectChoice(15)">
-          15
-        </div>
-        <div class="choice" data-choice="16" onclick="selectChoice(16)">
-          16
-        </div>
-        <div class="choice" data-choice="17" onclick="selectChoice(17)">
-          17
-        </div>
-      </div>
-      <button id="bet-button" onclick="placeBet()">Bet</button>
-    </div>
-    <div id="gameboy">
-      <div id="sum"></div>
-      <div id="screen">
-        <div id="dice-container">
-          <div class="dice" id="dice1"></div>
-          <div class="dice" id="dice2"></div>
-          <div class="dice" id="dice3"></div>
-        </div>
-      </div>
-      <div id="sums-container"></div>
-    </div>
-    <div id="record-board">
-      <h2>Record Board</h2>
-    </div>
-  </div>
-</body>
-<script>
-  let selectedChip = null;
-  let selectedChoice = null;
+    function selectChip(value) {
+      // Remove the 'selected' class from the previously selected chip
+      if (selectedChip !== null) {
+        document
+          .getElementById(`chip${selectedChip}`)
+          .classList.remove("selected");
+      }
 
-  function selectChip(value) {
-    // Remove the 'selected' class from the previously selected chip
-    if (selectedChip !== null) {
-      document
-        .getElementById(`chip${selectedChip}`)
-        .classList.remove("selected");
+      // Add the 'selected' class to the selected chip
+      selectedChip = value;
+      document.getElementById(`chip${selectedChip}`).classList.add("selected");
     }
 
-    // Add the 'selected' class to the selected chip
-    selectedChip = value;
-    document.getElementById(`chip${selectedChip}`).classList.add("selected");
-  }
+    function selectChoice(choice) {
+      // Remove the 'selected' class from the previously selected choice
+      if (selectedChoice !== null) {
+        document
+          .querySelector(`.choice[data-choice="${selectedChoice}"]`)
+          .classList.remove("selected");
+      }
 
-  function selectChoice(choice) {
-    // Remove the 'selected' class from the previously selected choice
-    if (selectedChoice !== null) {
+      // Add the 'selected' class to the selected choice
+      selectedChoice = choice;
       document
         .querySelector(`.choice[data-choice="${selectedChoice}"]`)
-        .classList.remove("selected");
+        .classList.add("selected");
     }
 
-    // Add the 'selected' class to the selected choice
-    selectedChoice = choice;
-    document
-      .querySelector(`.choice[data-choice="${selectedChoice}"]`)
-      .classList.add("selected");
-  }
-
-  function placeBet() {
-    if (selectedChip && selectedChoice) {
-      bet(localStorage.getItem("username"), -selectedChip);
-      game.rollDice();
-    } else {
-      alert("Please select a chip and a choice before betting.");
-    }
-  }
-
-  // Add a function to get the user's money
-  function getUserMoney(username) {
-    fetch(`/get_money?username=${username}`)
-      .then((response) => response.json())
-      .then((data) => {
-        document.getElementById(
-          "user-money"
-        ).textContent = `Money: ${data.money}`;
-      });
-  }
-
-  // Call getUserMoney when the page loads
-  document.addEventListener("DOMContentLoaded", () => {
-    getUserMoney(localStorage.getItem("username"));
-  });
-
-  function bet(username, amount) {
-    const url = "/add_amount";
-    const data = {
-      username: username,
-      amount: parseFloat(amount),
-    };
-
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.message) {
-          alert(data.message);
+    function placeBet() {
+      if (selectedChip && selectedChoice) {
+        // Calculate the winning amount based on the odds
+        let odds;
+        if (selectedChoice === "Big" || selectedChoice === "Small") {
+          odds = 2;
+        } else {
+          switch (selectedChoice) {
+            case "4":
+            case "17":
+              odds = 50;
+              break;
+            case "5":
+            case "16":
+              odds = 18;
+              break;
+            case "6":
+            case "15":
+              odds = 14;
+              break;
+            case "7":
+            case "14":
+              odds = 12;
+              break;
+            case "8":
+            case "13":
+              odds = 8;
+              break;
+            case "9":
+            case "10":
+            case "11":
+            case "12":
+              odds = 6;
+              break;
+          }
         }
-        // Call getUserMoney to update the user's money
-        getUserMoney(username);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }
-  
-  document.getElementById("username").textContent =
-    localStorage.getItem("username");
+        let winningAmount = selectedChip * odds;
 
-  // Close the modal when the close button is clicked
-  document
-    .getElementById("modal-close")
-    .addEventListener("click", function () {
-      document.getElementById("modal").style.display = "none";
-    });
-</script>
-<script>
-  class DiceGame {
-    constructor() {
-      this.diceFaces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
-    }
-
-    rollDice() {
-      var dice1 = Math.floor(Math.random() * 6);
-      var dice2 = Math.floor(Math.random() * 6);
-      var dice3 = Math.floor(Math.random() * 6);
-
-      document.getElementById("dice1").textContent = this.diceFaces[dice1];
-      document.getElementById("dice2").textContent = this.diceFaces[dice2];
-      document.getElementById("dice3").textContent = this.diceFaces[dice3];
-
-      var sum = dice1 + dice2 + dice3 + 3; // +3 because diceFaces is 0-indexed
-      document.getElementById("sum").textContent = "Sum: " + sum;
-      document.getElementById("sum").classList.add("sum-row"); // Add the sum-row class
-
-      // Check if the selected choice matches the result
-      var result = sum >= 11 ? "Big" : "Small";
-      if (selectedChoice == result || selectedChoice == sum) {
-        // If the choice matches, show a success message
-        document.getElementById("modal-message").textContent = "You won!";
+        // Update the user's money
+        let username = localStorage.getItem("username");
+        bet(username, -selectedChip); // Subtract the bet amount
+        game.rollDice();
+        if (
+          document.getElementById("modal-message").textContent === "You won!"
+        ) {
+          bet(username, winningAmount); // Add the winning amount
+        }
       } else {
-        // If the choice does not match, show a failure message
-        document.getElementById("modal-message").textContent = "You lost!";
+        alert("Please select a chip and a choice before betting.");
       }
-      // Show the modal
-      document.getElementById("modal").style.display = "block";
-
-      // Save the sum to the Flask API
-      this.saveSum(sum);
     }
 
-    saveSum(sum) {
-      fetch("/save", {
+    // Add a function to get the user's money
+    function getUserMoney(username) {
+      fetch(`/get_money?username=${username}`)
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById(
+            "user-money"
+          ).textContent = `Money: ${data.money}`;
+        });
+    }
+
+    // Call getUserMoney when the page loads
+    document.addEventListener("DOMContentLoaded", () => {
+      getUserMoney(localStorage.getItem("username"));
+    });
+
+    function bet(username, amount) {
+      const url = "/add_amount";
+      const data = {
+        username: username,
+        amount: parseFloat(amount),
+      };
+
+      fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ sum: sum }),
+        body: JSON.stringify(data),
       })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("HTTP error " + response.status);
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.message) {
+            alert(data.message);
           }
-          return response.json();
+          // Call getUserMoney to update the user's money
+          getUserMoney(username);
         })
-        .then((json) => console.log(json))
-        .catch(function () {
-          console.log("Error occurred while fetching /save");
+        .catch((error) => {
+          console.error("Error:", error);
         });
     }
 
-    getSums() {
-      fetch("/get")
-        .then((response) => response.json())
-        .then((data) => {
-          var sumsContainer = document.getElementById("sums-container");
-          sumsContainer.innerHTML = ""; // Clear the container
-          data.forEach((record, index) => {
-            var row = document.createElement("div");
-            row.textContent = record.Sum;
-            row.className = "sum-row"; // Add a CSS class to the row
-            sumsContainer.appendChild(row);
+    document.getElementById("username").textContent =
+      localStorage.getItem("username");
+
+    // Close the modal when the close button is clicked
+    document
+      .getElementById("modal-close")
+      .addEventListener("click", function () {
+        document.getElementById("modal").style.display = "none";
+      });
+  </script>
+  <script>
+    class DiceGame {
+      constructor() {
+        this.diceFaces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
+      }
+
+      rollDice() {
+        var dice1 = Math.floor(Math.random() * 6);
+        var dice2 = Math.floor(Math.random() * 6);
+        var dice3 = Math.floor(Math.random() * 6);
+
+        document.getElementById("dice1").textContent = this.diceFaces[dice1];
+        document.getElementById("dice2").textContent = this.diceFaces[dice2];
+        document.getElementById("dice3").textContent = this.diceFaces[dice3];
+
+        var sum = dice1 + dice2 + dice3 + 3; // +3 because diceFaces is 0-indexed
+        document.getElementById("sum").textContent = "Sum: " + sum;
+        document.getElementById("sum").classList.add("sum-row"); // Add the sum-row class
+
+        // Check if the selected choice matches the result
+        var result = sum >= 11 ? "Big" : "Small";
+        if (selectedChoice == result || selectedChoice == sum) {
+          // If the choice matches, show a success message
+          document.getElementById("modal-message").textContent = "You won!";
+        } else {
+          // If the choice does not match, show a failure message
+          document.getElementById("modal-message").textContent = "You lost!";
+        }
+        // Show the modal
+        document.getElementById("modal").style.display = "block";
+
+        // Save the sum to the Flask API
+        this.saveSum(sum);
+      }
+
+      saveSum(sum) {
+        fetch("/save", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ sum: sum }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("HTTP error " + response.status);
+            }
+            return response.json();
+          })
+          .then((json) => console.log(json))
+          .catch(function () {
+            console.log("Error occurred while fetching /save");
           });
-        });
+      }
+
+      getSums() {
+        fetch("/get")
+          .then((response) => response.json())
+          .then((data) => {
+            var sumsContainer = document.getElementById("sums-container");
+            sumsContainer.innerHTML = ""; // Clear the container
+            data.forEach((record, index) => {
+              var row = document.createElement("div");
+              row.textContent = record.Sum;
+              row.className = "sum-row"; // Add a CSS class to the row
+              sumsContainer.appendChild(row);
+            });
+          });
+      }
+
+      getPercentages() {
+        fetch("/percentage")
+          .then((response) => response.json())
+          .then((data) => {
+            var recordBoard = document.getElementById("record-board");
+            recordBoard.innerHTML = ""; // Clear the record board
+
+            // Create and append the title
+            var title = document.createElement("h2");
+            title.textContent = "Record Board";
+            recordBoard.appendChild(title);
+
+            var proportions = data[0].proportions;
+            for (var sum in proportions) {
+              var row = document.createElement("div");
+              var percentage = (proportions[sum] * 100).toFixed(2); // Convert to percentage
+              row.textContent = "Sum " + sum + ": " + percentage + "%";
+              recordBoard.appendChild(row);
+            }
+
+            // Fetch the data from the /bigsmall endpoint and append it to the record board
+            this.getBigSmall();
+          });
+      }
+
+      getBigSmall() {
+        fetch("/bigsmall")
+          .then((response) => response.json())
+          .then((data) => {
+            var recordBoard = document.getElementById("record-board");
+            var proportions = data[0].proportions;
+            for (var type in proportions) {
+              var row = document.createElement("div");
+              var percentage = (proportions[type] * 100).toFixed(2); // Convert to percentage
+              row.textContent = type + ": " + percentage + "%";
+              recordBoard.appendChild(row);
+            }
+          });
+      }
     }
 
-    getPercentages() {
-      fetch("/percentage")
-        .then((response) => response.json())
-        .then((data) => {
-          var recordBoard = document.getElementById("record-board");
-          recordBoard.innerHTML = ""; // Clear the record board
+    // Create a new instance of the game
+    var game = new DiceGame();
 
-          // Create and append the title
-          var title = document.createElement("h2");
-          title.textContent = "Record Board";
-          recordBoard.appendChild(title);
+    // Call getPercentages every second to keep the record board up to date
+    setInterval(() => game.getPercentages(), 1000);
 
-          var proportions = data[0].proportions;
-          for (var sum in proportions) {
-            var row = document.createElement("div");
-            var percentage = (proportions[sum] * 100).toFixed(2); // Convert to percentage
-            row.textContent = "Sum " + sum + ": " + percentage + "%";
-            recordBoard.appendChild(row);
-          }
-
-          // Fetch the data from the /bigsmall endpoint and append it to the record board
-          this.getBigSmall();
-        });
-    }
-
-    getBigSmall() {
-      fetch("/bigsmall")
-        .then((response) => response.json())
-        .then((data) => {
-          var recordBoard = document.getElementById("record-board");
-          var proportions = data[0].proportions;
-          for (var type in proportions) {
-            var row = document.createElement("div");
-            var percentage = (proportions[type] * 100).toFixed(2); // Convert to percentage
-            row.textContent = type + ": " + percentage + "%";
-            recordBoard.appendChild(row);
-          }
-        });
-    }
-  }
-
-  // Create a new instance of the game
-  var game = new DiceGame();
-
-  // Call getPercentages every second to keep the record board up to date
-  setInterval(() => game.getPercentages(), 1000);
-
-  // Call getSums every second to keep the displayed sums up to date
-  setInterval(() => game.getSums(), 1000);
-
-</script>
-
+    // Call getSums every second to keep the displayed sums up to date
+    setInterval(() => game.getSums(), 1000);
+  </script>
 </html>
