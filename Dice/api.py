@@ -1,16 +1,63 @@
 from flask import Flask, request, jsonify, render_template
 import pandas as pd
 import os
+from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash
 
 app = Flask(__name__)
 
 # Define the path to the CSV file
 csv_file = 'sum_records.csv'
 
+# Define the path to the CSV file
+account_file = 'account.csv'
+
+
+@app.route('/game', methods=['GET'])
+def game():
+    return render_template("game.html")
+
 
 @app.route('/', methods=['GET'])
 def index():
     return render_template("index.html")
+
+
+@app.route('/register', methods=['POST'])
+def register():
+    username = request.json['username']
+    password = request.json['password']
+    hashed_password = generate_password_hash(password)
+
+    if os.path.exists(account_file):
+        df = pd.read_csv(account_file)
+        # Check if the username already exists
+        if df[df['username'] == username].shape[0] > 0:
+            return jsonify({'message': 'Username already exists'}), 400
+        # If the username doesn't exist, append the new account
+        df = df._append({'username': username, 'password': hashed_password}, ignore_index=True)
+    else:
+        # If the file doesn't exist, create a new DataFrame
+        df = pd.DataFrame({'username': [username], 'password': [hashed_password]})
+    df.to_csv(account_file, index=False)
+    return jsonify({'message': 'Account created successfully'}), 200
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.json['username']
+    password = request.json['password']
+
+    if os.path.exists(account_file):
+        df = pd.read_csv(account_file)
+        user = df[df['username'] == username].iloc[0]
+
+        if user is not None and check_password_hash(user['password'], password):
+            return jsonify({'message': 'Login successful'}), 200
+        else:
+            return jsonify({'message': 'Invalid username or password'}), 401
+    else:
+        return jsonify({'message': 'No users registered'}), 401
 
 
 @app.route('/save', methods=['POST'])

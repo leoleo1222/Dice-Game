@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      #container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #gameboy {
+        /* Adjust the width and height as needed */
+        margin-right: 50px; /* Add some space between the Game Boy and the record board */
+      }
+
+      #record-board {
+        width: 300px;
+        height: 580px;
+        background-color: #8b8b8b; /* Same grey as the Game Boy */
+        border: 10px solid #333333; /* Same border as the Game Boy */
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        font-family: "Press Start 2P", cursive; /* Same font as the Game Boy */
+        color: #4caf50; /* Same green as the Game Boy */
+        text-shadow: 2px 2px #000000; /* Same text shadow as the Game Boy */
+      }
+
+      #record-board h2 {
+        margin-bottom: 20px; /* Add some space below the title */
+      }
+
+      #record-board div {
+        margin-bottom: 10px; /* Add some space between the rows */
+      }
+
+      .first-row {
+        background-color: yellow;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+      }
+
+      #gameboy {
+        width: 300px;
+        height: 580px;
+        background-color: #8b8b8b; /* Game Boy grey */
+        border: 10px solid #333333; /* Game Boy border */
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+      }
+
+      #screen {
+        width: 90%;
+        height: 50%;
+        background-color: #c3c3c3; /* Screen grey */
+        border: 3px solid #000000; /* Screen border */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      #dice-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 50%;
+      }
+
+      .dice {
+        width: 50px;
+        height: 50px;
+        margin: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 130px;
+        border: none;
+      }
+
+      button {
+        margin: 20px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #4caf50; /* Green background */
+        color: white; /* White text */
+        font-size: 18px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #45a049; /* Darker green when hovered */
+      }
+
+      #sums-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 90%;
+        margin-bottom: 20px;
+      }
+
+      .sum-row {
+        width: 100%;
+        height: 30px;
+        background-color: #c3c3c3; /* Screen grey */
+        border: 1px solid #000000; /* Screen border */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 5px;
+        font-size: 20px;
+        color: #4caf50; /* Green text */
+        text-shadow: 2px 2px #000000; /* Text shadow */
+        font-family: "Press Start 2P", cursive; /* Retro video game font */
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div id="gameboy">
+        <div id="sum"></div>
+        <div id="screen">
+          <div id="dice-container">
+            <div class="dice" id="dice1"></div>
+            <div class="dice" id="dice2"></div>
+            <div class="dice" id="dice3"></div>
+          </div>
+          <button onclick="rollDice()">Roll Dice</button>
+        </div>
+        <div id="sums-container"></div>
+      </div>
+      <div id="record-board">
+        <h2>Record Board</h2>
+      </div>
+    </div>
+  </body>
+  <script>
+    class DiceGame {
+      constructor() {
+        this.diceFaces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
+      }
+
+      rollDice() {
+        var dice1 = Math.floor(Math.random() * 6);
+        var dice2 = Math.floor(Math.random() * 6);
+        var dice3 = Math.floor(Math.random() * 6);
+
+        document.getElementById("dice1").textContent = this.diceFaces[dice1];
+        document.getElementById("dice2").textContent = this.diceFaces[dice2];
+        document.getElementById("dice3").textContent = this.diceFaces[dice3];
+
+        var sum = dice1 + dice2 + dice3 + 3; // +3 because diceFaces is 0-indexed
+        document.getElementById("sum").textContent = "Sum: " + sum;
+        document.getElementById("sum").classList.add("sum-row"); // Add the sum-row class
+
+        // Save the sum to the Flask API
+        this.saveSum(sum);
+      }
+
+      saveSum(sum) {
+        fetch("/save", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ sum: sum }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("HTTP error " + response.status);
+            }
+            return response.json();
+          })
+          .then((json) => console.log(json))
+          .catch(function () {
+            console.log("Error occurred while fetching /save");
+          });
+      }
+
+      getSums() {
+        fetch("/get")
+          .then((response) => response.json())
+          .then((data) => {
+            var sumsContainer = document.getElementById("sums-container");
+            sumsContainer.innerHTML = ""; // Clear the container
+            data.forEach((record, index) => {
+              var row = document.createElement("div");
+              row.textContent = record.Sum;
+              row.className = "sum-row"; // Add a CSS class to the row
+              sumsContainer.appendChild(row);
+            });
+          });
+      }
+
+      getPercentages() {
+        fetch("/percentage")
+          .then((response) => response.json())
+          .then((data) => {
+            var recordBoard = document.getElementById("record-board");
+            recordBoard.innerHTML = ""; // Clear the record board
+
+            // Create and append the title
+            var title = document.createElement("h2");
+            title.textContent = "Record Board";
+            recordBoard.appendChild(title);
+
+            var proportions = data[0].proportions;
+            for (var sum in proportions) {
+              var row = document.createElement("div");
+              var percentage = (proportions[sum] * 100).toFixed(2); // Convert to percentage
+              row.textContent = "Sum " + sum + ": " + percentage + "%";
+              recordBoard.appendChild(row);
+            }
+
+            // Fetch the data from the /bigsmall endpoint and append it to the record board
+            this.getBigSmall();
+          });
+      }
+
+      getBigSmall() {
+        fetch("/bigsmall")
+          .then((response) => response.json())
+          .then((data) => {
+            var recordBoard = document.getElementById("record-board");
+            var proportions = data[0].proportions;
+            for (var type in proportions) {
+              var row = document.createElement("div");
+              var percentage = (proportions[type] * 100).toFixed(2); // Convert to percentage
+              row.textContent = type + ": " + percentage + "%";
+              recordBoard.appendChild(row);
+            }
+          });
+      }
+    }
+
+    // Create a new instance of the game
+    var game = new DiceGame();
+
+    // Call getPercentages every second to keep the record board up to date
+    setInterval(() => game.getPercentages(), 1000);
+
+    // Call getSums every second to keep the displayed sums up to date
+    setInterval(() => game.getSums(), 1000);
+
+    // Attach the rollDice method to the button
+    document
+      .querySelector("button")
+      .addEventListener("click", () => game.rollDice());
+  </script>
+</html>
