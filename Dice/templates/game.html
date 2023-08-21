@@ -170,6 +170,8 @@
           if (data.message) {
             alert(data.message);
           }
+          // Call getUserMoney to update the user's money
+          getUserMoney(username);
         })
         .catch((error) => {
           console.error("Error:", error);

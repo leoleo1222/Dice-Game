@@ -106,6 +106,22 @@ def get_record():
         data = []
     return jsonify(data), 200
 
+@app.route('/get_money', methods=['GET'])
+def get_money():
+    username = request.args.get('username')
+
+    if os.path.exists(account_file):
+        df = pd.read_csv(account_file)
+        # Check if the username exists
+        if df[df['username'] == username].shape[0] > 0:
+            # Get the user's money
+            money = int(df.loc[df['username'] == username, 'amount'].values[0])
+        else:
+            return jsonify({'message': 'Username does not exist'}), 400
+    else:
+        return jsonify({'message': 'No users registered'}), 400
+
+    return jsonify({'money': money}), 200
 
 @app.route('/percentage', methods=['GET'])
 def get_percentage():
