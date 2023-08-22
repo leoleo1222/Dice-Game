@@ -1,1 +1,2 @@
 username,password,amount
+leo,pbkdf2:sha256:600000$XH7ZbmrhO2ErAuD8$27a9b9084a70e4b2840167fe45903c3b1c82784801532cf66f24dd4d64d39a45,100

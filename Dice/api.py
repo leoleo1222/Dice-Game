@@ -22,6 +22,10 @@ def game():
 def index():
     return render_template("index.html")
 
+@app.route('/score', methods=['GET'])
+def score():
+    return render_template("scoreboard.html")
+
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -42,6 +46,14 @@ def register():
     df.to_csv(account_file, index=False)
     return jsonify({'message': 'Account created successfully'}), 200
 
+@app.route('/get_all_users', methods=['GET'])
+def get_all_users():
+    if os.path.exists(account_file):
+        df = pd.read_csv(account_file)
+        data = df[['username', 'amount']].to_dict('records')
+    else:
+        data = []
+    return jsonify(data), 200
 
 @app.route('/add_amount', methods=['POST'])
 def add_amount():

@@ -203,9 +203,9 @@
   function filterChoices(sum, choices) {
     return choices.filter(
       (choice) =>
-        choice == sum ||
-        (sum >= 11 && choice == "Big") ||
-        (sum < 11 && choice == "Small")
+        Number(choice) === sum ||
+        (sum >= 11 && choice === "Big") ||
+        (sum < 11 && choice === "Small")
     );
   }
 
