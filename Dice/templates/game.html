@@ -1,423 +1,478 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{ url_for('static', filename='css/styles.css') }}"
-    />
-    <style>
-      body {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        font-family: Arial, sans-serif;
-        background-color: #f0f0f0;
-      }
 
-      #main {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        flex-grow: 1;
-        /* Take up remaining space */
-      }
-    </style>
-  </head>
-
-  <body>
-    <div id="modal" style="display: none">
-      <div id="modal-content">
-        <span id="modal-close">&times;</span>
-        <p id="modal-message"></p>
-      </div>
-    </div>
-    <div id="main">
-      <table id="odds-table">
-        <tr>
-          <th>Choice</th>
-          <td>Big</td>
-          <td>Small</td>
-          <td>4</td>
-          <td>5</td>
-          <td>6</td>
-          <td>7</td>
-          <td>8</td>
-          <td>9</td>
-          <td>10</td>
-          <td>11</td>
-          <td>12</td>
-          <td>13</td>
-          <td>14</td>
-          <td>15</td>
-          <td>16</td>
-          <td>17</td>
-        </tr>
-        <tr>
-          <th>Odds</th>
-          <td>1:2</td>
-          <td>1:2</td>
-          <td>1:50</td>
-          <td>1:18</td>
-          <td>1:14</td>
-          <td>1:12</td>
-          <td>1:8</td>
-          <td>1:6</td>
-          <td>1:6</td>
-          <td>1:6</td>
-          <td>1:6</td>
-          <td>1:8</td>
-          <td>1:12</td>
-          <td>1:14</td>
-          <td>1:18</td>
-          <td>1:50</td>
-        </tr>
-      </table>
-      <div id="container">
-        <div id="userinfo">
-          <div id="username"></div>
-          <div id="user-money"></div>
-          <div id="betting-chips">
-            <div class="chip" id="chip1" onclick="selectChip(1)">1</div>
-            <div class="chip" id="chip5" onclick="selectChip(5)">5</div>
-            <div class="chip" id="chip10" onclick="selectChip(10)">10</div>
-          </div>
-          <div id="betting-choices">
-            <div class="choice" data-choice="Big" onclick="selectChoice('Big')">
-              Big
-            </div>
-            <div
-              class="choice"
-              data-choice="Small"
-              onclick="selectChoice('Small')"
-            >
-              Small
-            </div>
-            <div class="choice" data-choice="4" onclick="selectChoice(4)">
-              4
-            </div>
-            <div class="choice" data-choice="5" onclick="selectChoice(5)">
-              5
-            </div>
-            <div class="choice" data-choice="6" onclick="selectChoice(6)">
-              6
-            </div>
-            <div class="choice" data-choice="7" onclick="selectChoice(7)">
-              7
-            </div>
-            <div class="choice" data-choice="8" onclick="selectChoice(8)">
-              8
-            </div>
-            <div class="choice" data-choice="9" onclick="selectChoice(9)">
-              9
-            </div>
-            <div class="choice" data-choice="10" onclick="selectChoice(10)">
-              10
-            </div>
-            <div class="choice" data-choice="11" onclick="selectChoice(11)">
-              11
-            </div>
-            <div class="choice" data-choice="12" onclick="selectChoice(12)">
-              12
-            </div>
-            <div class="choice" data-choice="13" onclick="selectChoice(13)">
-              13
-            </div>
-            <div class="choice" data-choice="14" onclick="selectChoice(14)">
-              14
-            </div>
-            <div class="choice" data-choice="15" onclick="selectChoice(15)">
-              15
-            </div>
-            <div class="choice" data-choice="16" onclick="selectChoice(16)">
-              16
-            </div>
-            <div class="choice" data-choice="17" onclick="selectChoice(17)">
-              17
-            </div>
-          </div>
-          <button id="bet-button" onclick="placeBet()">Bet</button>
-        </div>
-        <div id="gameboy">
-          <div id="sum"></div>
-          <div id="screen">
-            <div id="dice-container">
-              <div class="dice" id="dice1"></div>
-              <div class="dice" id="dice2"></div>
-              <div class="dice" id="dice3"></div>
-            </div>
-          </div>
-          <div id="sums-container"></div>
-        </div>
-        <div id="record-board">
-          <h2>Record Board</h2>
-        </div>
-      </div>
-    </div>
-  </body>
-  <script>
-    let selectedChip = null;
-    let selectedChoice = null;
-
-    function selectChip(value) {
-      // Remove the 'selected' class from the previously selected chip
-      if (selectedChip !== null) {
-        document
-          .getElementById(`chip${selectedChip}`)
-          .classList.remove("selected");
-      }
-
-      // Add the 'selected' class to the selected chip
-      selectedChip = value;
-      document.getElementById(`chip${selectedChip}`).classList.add("selected");
+<head>
+  <meta charset="UTF-8" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}" />
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
     }
 
-    function selectChoice(choice) {
-      // Remove the 'selected' class from the previously selected choice
-      if (selectedChoice !== null) {
-        document
-          .querySelector(`.choice[data-choice="${selectedChoice}"]`)
-          .classList.remove("selected");
-      }
-
-      // Add the 'selected' class to the selected choice
-      selectedChoice = choice;
-      document
-        .querySelector(`.choice[data-choice="${selectedChoice}"]`)
-        .classList.add("selected");
+    #main {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex-grow: 1;
+      /* Take up remaining space */
     }
+  </style>
+</head>
 
-    function placeBet() {
-      if (selectedChip && selectedChoice) {
-        game.getPercentages();
-        game.getSums();
+<body>
+  <div id="modal" style="display: none">
+    <div id="modal-content">
+      <span id="modal-close">&times;</span>
+      <p id="modal-message"></p>
+    </div>
+  </div>
+  <div id="main">
+    <table id="odds-table">
+      <tr>
+        <th>Choice</th>
+        <td>Big</td>
+        <td>Small</td>
+        <td>4</td>
+        <td>5</td>
+        <td>6</td>
+        <td>7</td>
+        <td>8</td>
+        <td>9</td>
+        <td>10</td>
+        <td>11</td>
+        <td>12</td>
+        <td>13</td>
+        <td>14</td>
+        <td>15</td>
+        <td>16</td>
+        <td>17</td>
+      </tr>
+      <tr>
+        <th>Odds</th>
+        <td>1:2</td>
+        <td>1:2</td>
+        <td>1:50</td>
+        <td>1:18</td>
+        <td>1:14</td>
+        <td>1:12</td>
+        <td>1:8</td>
+        <td>1:6</td>
+        <td>1:6</td>
+        <td>1:6</td>
+        <td>1:6</td>
+        <td>1:8</td>
+        <td>1:12</td>
+        <td>1:14</td>
+        <td>1:18</td>
+        <td>1:50</td>
+      </tr>
+    </table>
+    <div id="container">
+      <div id="userinfo">
+        <div id="username"></div>
+        <div id="user-money"></div>
+        <div id="betting-chips">
+          <div class="chip" id="chip1" onclick="toggleChip(1)">1</div>
+          <div class="chip" id="chip5" onclick="toggleChip(5)">5</div>
+          <div class="chip" id="chip10" onclick="toggleChip(10)">10</div>
+        </div>
+        <div id="betting-choices">
+          <div class="choice" data-choice="Big" onclick="toggleChoice('Big')">
+            Big
+          </div>
+          <div class="choice" data-choice="Small" onclick="toggleChoice('Small')">
+            Small
+          </div>
+          <div class="choice" data-choice="4" onclick="toggleChoice(4)">
+            4
+          </div>
+          <div class="choice" data-choice="5" onclick="toggleChoice(5)">
+            5
+          </div>
+          <div class="choice" data-choice="6" onclick="toggleChoice(6)">
+            6
+          </div>
+          <div class="choice" data-choice="7" onclick="toggleChoice(7)">
+            7
+          </div>
+          <div class="choice" data-choice="8" onclick="toggleChoice(8)">
+            8
+          </div>
+          <div class="choice" data-choice="9" onclick="toggleChoice(9)">
+            9
+          </div>
+          <div class="choice" data-choice="10" onclick="toggleChoice(10)">
+            10
+          </div>
+          <div class="choice" data-choice="11" onclick="toggleChoice(11)">
+            11
+          </div>
+          <div class="choice" data-choice="12" onclick="toggleChoice(12)">
+            12
+          </div>
+          <div class="choice" data-choice="13" onclick="toggleChoice(13)">
+            13
+          </div>
+          <div class="choice" data-choice="14" onclick="toggleChoice(14)">
+            14
+          </div>
+          <div class="choice" data-choice="15" onclick="toggleChoice(15)">
+            15
+          </div>
+          <div class="choice" data-choice="16" onclick="toggleChoice(16)">
+            16
+          </div>
+          <div class="choice" data-choice="17" onclick="toggleChoice(17)">
+            17
+          </div>
+        </div>
+        <button id="bet-button" onclick="placeBet()">Bet</button>
+      </div>
+      <div id="gameboy">
+        <div id="sum"></div>
+        <div id="screen">
+          <div id="dice-container">
+            <div class="dice" id="dice1"></div>
+            <div class="dice" id="dice2"></div>
+            <div class="dice" id="dice3"></div>
+          </div>
+        </div>
+        <div id="sums-container"></div>
+      </div>
+      <div id="record-board">
+        <h2>Record Board</h2>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+  let selectedChips = [];
+  let selectedChoices = [];
 
-        // Calculate the winning amount based on the odds
-        let odds;
-        if (selectedChoice === "Big" || selectedChoice === "Small") {
-          odds = 2;
-        } else {
-          switch (selectedChoice) {
-            case "4":
-            case "17":
-              odds = 50;
-              break;
-            case "5":
-            case "16":
-              odds = 18;
-              break;
-            case "6":
-            case "15":
-              odds = 14;
-              break;
-            case "7":
-            case "14":
-              odds = 12;
-              break;
-            case "8":
-            case "13":
-              odds = 8;
-              break;
-            case "9":
-            case "10":
-            case "11":
-            case "12":
-              odds = 6;
-              break;
-          }
-        }
-        let winningAmount = selectedChip * odds;
+  function toggleChip(value) {
+    const chipIndex = selectedChips.indexOf(value);
+    const chipElement = document.getElementById(`chip${value}`);
 
-        // Update the user's money
-        let username = localStorage.getItem("username");
-        bet(username, -selectedChip); // Subtract the bet amount
-        game.rollDice();
-        if (
-          document.getElementById("modal-message").textContent === "You won!"
-        ) {
-          alert(winningAmount);
-          bet(username, winningAmount + selectedChip); // Add the winning amount
+    if (chipIndex > -1) {
+      // If the chip is already selected, remove it
+      selectedChips.splice(chipIndex, 1);
+      chipElement.classList.remove("selected");
+    } else {
+      // If the chip is not selected, add it
+      selectedChips.push(value);
+      chipElement.classList.add("selected");
+    }
+  }
+
+  function clearSelections() {
+    selectedChips = [];
+    selectedChoices = [];
+
+    const chips = document.querySelectorAll(".chip");
+    chips.forEach((chip) => chip.classList.remove("selected"));
+
+    const choices = document.querySelectorAll(".choice");
+    choices.forEach((choice) => choice.classList.remove("selected"));
+  }
+
+  function toggleChoice(choice) {
+    const choiceIndex = selectedChoices.indexOf(choice);
+    const choiceElement = document.querySelector(
+      `.choice[data-choice="${choice}"]`
+    );
+
+    if (choiceIndex > -1) {
+      // If the choice is already selected, remove it
+      selectedChoices.splice(choiceIndex, 1);
+      choiceElement.classList.remove("selected");
+    } else {
+      // If the choice is not selected, add it
+      selectedChoices.push(choice);
+      choiceElement.classList.add("selected");
+    }
+  }
+
+  function filterChoices(sum, choices) {
+    return choices.filter(
+      (choice) =>
+        choice == sum ||
+        (sum >= 11 && choice == "Big") ||
+        (sum < 11 && choice == "Small")
+    );
+  }
+
+  function placeBet() {
+    if (selectedChips.length > 0 && selectedChoices.length > 0) {
+      // Calculate the total bet amount by summing the values of the selected chips
+      const totalBetAmount = selectedChips.reduce(
+        (total, chipValue) => total + chipValue,
+        0
+      );
+
+      console.log("Total bet amount: " + totalBetAmount * selectedChoices.length);
+      console.log("Selected choices: " + selectedChoices);
+
+      game.getPercentages();
+      game.getSums();
+      game.rollDice(); // Roll the dice
+
+      // var selectedChoices before filter 
+      var numofselectedChoices = selectedChoices.length;
+
+      // Filter out the choices that do not match the sum in rollDice
+      selectedChoices = filterChoices(game.sum, selectedChoices);
+
+      // Calculate the winning amount based on the odds
+      let winningAmount = calculateWinningAmount(totalBetAmount, selectedChoices);
+
+      // Update the user's money
+      let username = localStorage.getItem("username");
+      if (selectedChoices.length > 0) {
+        if (winningAmount > 0) {
+          bet(username, winningAmount - totalBetAmount * numofselectedChoices); // Add the winning amount
+        } else if (winningAmount < 0) {
+          bet(username, -totalBetAmount * numofselectedChoices); // Subtract the total bet amount
         }
       } else {
-        alert("Please select a chip and a choice before betting.");
+        bet(username, -totalBetAmount * numofselectedChoices); // Subtract the total bet amount directly
       }
-    }
 
-    // Add a function to get the user's money
-    function getUserMoney(username) {
-      fetch(`/get_money?username=${username}`)
-        .then((response) => response.json())
-        .then((data) => {
-          document.getElementById(
-            "user-money"
-          ).textContent = `Money: ${data.money}`;
-        });
+      // Clear all the selected choices and chips
+      clearSelections();
+    } else if (selectedChips.length === 0) {
+      alert("Please select a chip");
+    } else if (selectedChoices.length === 0) {
+      alert("Please select a choice");
     }
+  }
 
-    // Call getUserMoney when the page loads
-    document.addEventListener("DOMContentLoaded", () => {
-      getUserMoney(localStorage.getItem("username"));
+
+  // Extracted calculation into a separate function
+  function calculateWinningAmount(totalBetAmount, selectedChoices) {
+    let odds;
+    let winningAmount = 0;
+    for (let selectedChoice of selectedChoices) {
+      if (selectedChoice === "Big" || selectedChoice === "Small") {
+        odds = 2;
+      } else {
+        switch (selectedChoice) {
+          case "4":
+          case "17":
+            odds = 50;
+            break;
+          case "5":
+          case "16":
+            odds = 18;
+            break;
+          case "6":
+          case "15":
+            odds = 14;
+            break;
+          case "7":
+          case "14":
+            odds = 12;
+            break;
+          case "8":
+          case "13":
+            odds = 8;
+            break;
+          case "9":
+          case "10":
+          case "11":
+          case "12":
+            odds = 6;
+            break;
+        }
+      }
+      winningAmount += totalBetAmount * odds;
+    }
+    return winningAmount;
+  }
+
+  // Add a function to get the user's money
+  function getUserMoney(username) {
+    fetch(`/get_money?username=${username}`)
+      .then((response) => response.json())
+      .then((data) => {
+        document.getElementById(
+          "user-money"
+        ).textContent = `Money: ${data.money}`;
+      });
+  }
+
+  // Call getUserMoney when the page loads
+  document.addEventListener("DOMContentLoaded", () => {
+    getUserMoney(localStorage.getItem("username"));
+  });
+
+  function bet(username, amount) {
+    const url = "/add_amount";
+    const data = {
+      username: username,
+      amount: parseFloat(amount),
+    };
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message) {
+          console.log(data.message);
+        }
+        // Call getUserMoney to update the user's money
+        getUserMoney(username);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+
+  document.getElementById("username").textContent =
+    localStorage.getItem("username");
+
+  // Close the modal when the close button is clicked
+  document
+    .getElementById("modal-close")
+    .addEventListener("click", function () {
+      document.getElementById("modal").style.display = "none";
     });
+</script>
+<script>
+  class DiceGame {
+    constructor() {
+      this.diceFaces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
+      this.sum = 0;
+    }
 
-    function bet(username, amount) {
-      const url = "/add_amount";
-      const data = {
-        username: username,
-        amount: parseFloat(amount),
-      };
+    rollDice() {
+      var dice1 = Math.floor(Math.random() * 6);
+      var dice2 = Math.floor(Math.random() * 6);
+      var dice3 = Math.floor(Math.random() * 6);
 
-      fetch(url, {
+      document.getElementById("dice1").textContent = this.diceFaces[dice1];
+      document.getElementById("dice2").textContent = this.diceFaces[dice2];
+      document.getElementById("dice3").textContent = this.diceFaces[dice3];
+
+      var sum = dice1 + dice2 + dice3 + 3; // +3 because diceFaces is 0-indexed
+      document.getElementById("sum").textContent = "Sum: " + sum;
+      document.getElementById("sum").classList.add("sum-row"); // Add the sum-row class
+
+      // Check if any of the selected choices matches the result
+      var result = sum >= 11 ? "Big" : "Small";
+      if (
+        selectedChoices.includes(result) ||
+        selectedChoices.includes(sum.toString())
+      ) {
+        // If the choice matches, show a success message
+        document.getElementById("modal-message").textContent = "You won!";
+      } else {
+        // If the choice does not match, show a failure message
+        document.getElementById("modal-message").textContent = "You lost!";
+      }
+      // Show the modal
+      document.getElementById("modal").style.display = "block";
+
+      // Save the sum to the Flask API
+      this.saveSum(sum);
+
+      this.sum = sum;
+
+      console.log("Sum: " + sum);
+    }
+
+    saveSum(sum) {
+      fetch("/save", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ sum: sum }),
       })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.message) {
-            console.log(data.message);
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("HTTP error " + response.status);
           }
-          // Call getUserMoney to update the user's money
-          getUserMoney(username);
+          return response.json();
         })
-        .catch((error) => {
-          console.error("Error:", error);
+        .then((json) => console.log(json))
+        .catch(function () {
+          console.log("Error occurred while fetching /save");
         });
     }
 
-    document.getElementById("username").textContent =
-      localStorage.getItem("username");
-
-    // Close the modal when the close button is clicked
-    document
-      .getElementById("modal-close")
-      .addEventListener("click", function () {
-        document.getElementById("modal").style.display = "none";
-      });
-  </script>
-  <script>
-    class DiceGame {
-      constructor() {
-        this.diceFaces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
-      }
-
-      rollDice() {
-        var dice1 = Math.floor(Math.random() * 6);
-        var dice2 = Math.floor(Math.random() * 6);
-        var dice3 = Math.floor(Math.random() * 6);
-
-        document.getElementById("dice1").textContent = this.diceFaces[dice1];
-        document.getElementById("dice2").textContent = this.diceFaces[dice2];
-        document.getElementById("dice3").textContent = this.diceFaces[dice3];
-
-        var sum = dice1 + dice2 + dice3 + 3; // +3 because diceFaces is 0-indexed
-        document.getElementById("sum").textContent = "Sum: " + sum;
-        document.getElementById("sum").classList.add("sum-row"); // Add the sum-row class
-
-        // Check if the selected choice matches the result
-        var result = sum >= 11 ? "Big" : "Small";
-        if (selectedChoice == result || selectedChoice == sum) {
-          // If the choice matches, show a success message
-          document.getElementById("modal-message").textContent = "You won!";
-        } else {
-          // If the choice does not match, show a failure message
-          document.getElementById("modal-message").textContent = "You lost!";
-        }
-        // Show the modal
-        document.getElementById("modal").style.display = "block";
-
-        // Save the sum to the Flask API
-        this.saveSum(sum);
-      }
-
-      saveSum(sum) {
-        fetch("/save", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ sum: sum }),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("HTTP error " + response.status);
-            }
-            return response.json();
-          })
-          .then((json) => console.log(json))
-          .catch(function () {
-            console.log("Error occurred while fetching /save");
+    getSums() {
+      fetch("/get")
+        .then((response) => response.json())
+        .then((data) => {
+          var sumsContainer = document.getElementById("sums-container");
+          sumsContainer.innerHTML = ""; // Clear the container
+          data.forEach((record, index) => {
+            var row = document.createElement("div");
+            row.textContent = record.Sum;
+            row.className = "sum-row"; // Add a CSS class to the row
+            sumsContainer.appendChild(row);
           });
-      }
-
-      getSums() {
-        fetch("/get")
-          .then((response) => response.json())
-          .then((data) => {
-            var sumsContainer = document.getElementById("sums-container");
-            sumsContainer.innerHTML = ""; // Clear the container
-            data.forEach((record, index) => {
-              var row = document.createElement("div");
-              row.textContent = record.Sum;
-              row.className = "sum-row"; // Add a CSS class to the row
-              sumsContainer.appendChild(row);
-            });
-          });
-      }
-
-      getPercentages() {
-        fetch("/percentage")
-          .then((response) => response.json())
-          .then((data) => {
-            var recordBoard = document.getElementById("record-board");
-            recordBoard.innerHTML = ""; // Clear the record board
-
-            // Create and append the title
-            var title = document.createElement("h2");
-            title.textContent = "Record Board";
-            recordBoard.appendChild(title);
-
-            var proportions = data[0].proportions;
-            for (var sum in proportions) {
-              var row = document.createElement("div");
-              var percentage = (proportions[sum] * 100).toFixed(2); // Convert to percentage
-              row.textContent = "Sum " + sum + ": " + percentage + "%";
-              recordBoard.appendChild(row);
-            }
-
-            // Fetch the data from the /bigsmall endpoint and append it to the record board
-            this.getBigSmall();
-          });
-      }
-
-      getBigSmall() {
-        fetch("/bigsmall")
-          .then((response) => response.json())
-          .then((data) => {
-            var recordBoard = document.getElementById("record-board");
-            var proportions = data[0].proportions;
-            for (var type in proportions) {
-              var row = document.createElement("div");
-              var percentage = (proportions[type] * 100).toFixed(2); // Convert to percentage
-              row.textContent = type + ": " + percentage + "%";
-              recordBoard.appendChild(row);
-            }
-          });
-      }
+        });
     }
 
-    // Create a new instance of the game
-    var game = new DiceGame();
-    game.getPercentages();
-    game.getSums();
-  </script>
+    getPercentages() {
+      fetch("/percentage")
+        .then((response) => response.json())
+        .then((data) => {
+          var recordBoard = document.getElementById("record-board");
+          recordBoard.innerHTML = ""; // Clear the record board
+
+          // Create and append the title
+          var title = document.createElement("h2");
+          title.textContent = "Record Board";
+          recordBoard.appendChild(title);
+
+          var proportions = data[0].proportions;
+          for (var sum in proportions) {
+            var row = document.createElement("div");
+            var percentage = (proportions[sum] * 100).toFixed(2); // Convert to percentage
+            row.textContent = "Sum " + sum + ": " + percentage + "%";
+            recordBoard.appendChild(row);
+          }
+
+          // Fetch the data from the /bigsmall endpoint and append it to the record board
+          this.getBigSmall();
+        });
+    }
+
+    getBigSmall() {
+      fetch("/bigsmall")
+        .then((response) => response.json())
+        .then((data) => {
+          var recordBoard = document.getElementById("record-board");
+          var proportions = data[0].proportions;
+          for (var type in proportions) {
+            var row = document.createElement("div");
+            var percentage = (proportions[type] * 100).toFixed(2); // Convert to percentage
+            row.textContent = type + ": " + percentage + "%";
+            recordBoard.appendChild(row);
+          }
+        });
+    }
+  }
+
+  // Create a new instance of the game
+  var game = new DiceGame();
+  game.getPercentages();
+  game.getSums();
+</script>
+
 </html>
