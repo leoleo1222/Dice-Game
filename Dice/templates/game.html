@@ -21,6 +21,14 @@
         font-family: Arial, sans-serif;
         background-color: #f0f0f0;
       }
+
+      #main {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        flex-grow: 1; /* Take up remaining space */
+      }
     </style>
   </head>
 
@@ -31,48 +39,126 @@
         <p id="modal-message"></p>
       </div>
     </div>
-    <div id="container">
-      <div id="userinfo">
-        <div id="username"></div>
-        <div id="user-money"></div>
-        <div id="betting-chips">
-          <div class="chip" id="chip1" onclick="selectChip(1)">1</div>
-          <div class="chip" id="chip5" onclick="selectChip(5)">5</div>
-          <div class="chip" id="chip10" onclick="selectChip(10)">10</div>
-        </div>
-        <div id="betting-choices">
-          <div class="choice" data-choice="Big" onclick="selectChoice('Big')">Big (1:2)</div>
-          <div class="choice" data-choice="Small" onclick="selectChoice('Small')">Small (1:2)</div>
-          <div class="choice" data-choice="4" onclick="selectChoice(4)">4 (1:50)</div>
-          <div class="choice" data-choice="5" onclick="selectChoice(5)">5 (1:18)</div>
-          <div class="choice" data-choice="6" onclick="selectChoice(6)">6 (1:14)</div>
-          <div class="choice" data-choice="7" onclick="selectChoice(7)">7 (1:12)</div>
-          <div class="choice" data-choice="8" onclick="selectChoice(8)">8 (1:8)</div>
-          <div class="choice" data-choice="9" onclick="selectChoice(9)">9 (1:6)</div>
-          <div class="choice" data-choice="10" onclick="selectChoice(10)">10 (1:6)</div>
-          <div class="choice" data-choice="11" onclick="selectChoice(11)">11 (1:6)</div>
-          <div class="choice" data-choice="12" onclick="selectChoice(12)">12 (1:6)</div>
-          <div class="choice" data-choice="13" onclick="selectChoice(13)">13 (1:8)</div>
-          <div class="choice" data-choice="14" onclick="selectChoice(14)">14 (1:12)</div>
-          <div class="choice" data-choice="15" onclick="selectChoice(15)">15 (1:14)</div>
-          <div class="choice" data-choice="16" onclick="selectChoice(16)">16 (1:18)</div>
-          <div class="choice" data-choice="17" onclick="selectChoice(17)">17 (1:50)</div>
-        </div>
-        <button id="bet-button" onclick="placeBet()">Bet</button>
-      </div>
-      <div id="gameboy">
-        <div id="sum"></div>
-        <div id="screen">
-          <div id="dice-container">
-            <div class="dice" id="dice1"></div>
-            <div class="dice" id="dice2"></div>
-            <div class="dice" id="dice3"></div>
+    <div id="main">
+      <table id="odds-table">
+        <tr>
+          <th>Choice</th>
+          <td>Big</td>
+          <td>Small</td>
+          <td>4</td>
+          <td>5</td>
+          <td>6</td>
+          <td>7</td>
+          <td>8</td>
+          <td>9</td>
+          <td>10</td>
+          <td>11</td>
+          <td>12</td>
+          <td>13</td>
+          <td>14</td>
+          <td>15</td>
+          <td>16</td>
+          <td>17</td>
+        </tr>
+        <tr>
+          <th>Odds</th>
+          <td>1:2</td>
+          <td>1:2</td>
+          <td>1:50</td>
+          <td>1:18</td>
+          <td>1:14</td>
+          <td>1:12</td>
+          <td>1:8</td>
+          <td>1:6</td>
+          <td>1:6</td>
+          <td>1:6</td>
+          <td>1:6</td>
+          <td>1:8</td>
+          <td>1:12</td>
+          <td>1:14</td>
+          <td>1:18</td>
+          <td>1:50</td>
+        </tr>
+      </table>
+      <div id="container">
+        <div id="userinfo">
+          <div id="username"></div>
+          <div id="user-money"></div>
+          <div id="betting-chips">
+            <div class="chip" id="chip1" onclick="selectChip(1)">1</div>
+            <div class="chip" id="chip5" onclick="selectChip(5)">5</div>
+            <div class="chip" id="chip10" onclick="selectChip(10)">10</div>
           </div>
+          <div id="betting-choices">
+            <div class="choice" data-choice="Big" onclick="selectChoice('Big')">
+              Big
+            </div>
+            <div
+              class="choice"
+              data-choice="Small"
+              onclick="selectChoice('Small')"
+            >
+              Small
+            </div>
+            <div class="choice" data-choice="4" onclick="selectChoice(4)">
+              4
+            </div>
+            <div class="choice" data-choice="5" onclick="selectChoice(5)">
+              5
+            </div>
+            <div class="choice" data-choice="6" onclick="selectChoice(6)">
+              6
+            </div>
+            <div class="choice" data-choice="7" onclick="selectChoice(7)">
+              7
+            </div>
+            <div class="choice" data-choice="8" onclick="selectChoice(8)">
+              8
+            </div>
+            <div class="choice" data-choice="9" onclick="selectChoice(9)">
+              9
+            </div>
+            <div class="choice" data-choice="10" onclick="selectChoice(10)">
+              10
+            </div>
+            <div class="choice" data-choice="11" onclick="selectChoice(11)">
+              11
+            </div>
+            <div class="choice" data-choice="12" onclick="selectChoice(12)">
+              12
+            </div>
+            <div class="choice" data-choice="13" onclick="selectChoice(13)">
+              13
+            </div>
+            <div class="choice" data-choice="14" onclick="selectChoice(14)">
+              14
+            </div>
+            <div class="choice" data-choice="15" onclick="selectChoice(15)">
+              15
+            </div>
+            <div class="choice" data-choice="16" onclick="selectChoice(16)">
+              16
+            </div>
+            <div class="choice" data-choice="17" onclick="selectChoice(17)">
+              17
+            </div>
+          </div>
+          <button id="bet-button" onclick="placeBet()">Bet</button>
         </div>
-        <div id="sums-container"></div>
-      </div>
-      <div id="record-board">
-        <h2>Record Board</h2>
+        <div id="gameboy">
+          <div id="sum"></div>
+          <div id="screen">
+            <div id="dice-container">
+              <div class="dice" id="dice1"></div>
+              <div class="dice" id="dice2"></div>
+              <div class="dice" id="dice3"></div>
+            </div>
+          </div>
+          <div id="sums-container"></div>
+        </div>
+        <div id="record-board">
+          <h2>Record Board</h2>
+        </div>
       </div>
     </div>
   </body>
@@ -153,7 +239,8 @@
         if (
           document.getElementById("modal-message").textContent === "You won!"
         ) {
-          bet(username, winningAmount); // Add the winning amount
+          alert(winningAmount)
+          bet(username, winningAmount + selectedChip); // Add the winning amount
         }
       } else {
         alert("Please select a chip and a choice before betting.");
@@ -193,7 +280,7 @@
         .then((response) => response.json())
         .then((data) => {
           if (data.message) {
-            alert(data.message);
+            console.log(data.message);
           }
           // Call getUserMoney to update the user's money
           getUserMoney(username);
