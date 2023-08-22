@@ -1,80 +1,86 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+      }
 
-<head>
-  <meta charset="UTF-8" />
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}" />
-  <style>
-    body {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-    }
+      #main {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        flex-grow: 1;
+        /* Take up remaining space */
+      }
+    </style>
+  </head>
 
-    #main {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      flex-grow: 1;
-      /* Take up remaining space */
-    }
-  </style>
-</head>
-
-<body>
-  <div id="modal" style="display: none">
-    <div id="modal-content">
-      <span id="modal-close">&times;</span>
-      <p id="modal-message"></p>
+  <body>
+    <div id="modal" style="display: none">
+      <div id="modal-content">
+        <span id="modal-close">&times;</span>
+        <p id="modal-message"></p>
+      </div>
     </div>
-  </div>
-  <div id="main">
-    <table id="odds-table">
-      <tr>
-        <th>Choice</th>
-        <td>Big</td>
-        <td>Small</td>
-        <td>4</td>
-        <td>5</td>
-        <td>6</td>
-        <td>7</td>
-        <td>8</td>
-        <td>9</td>
-        <td>10</td>
-        <td>11</td>
-        <td>12</td>
-        <td>13</td>
-        <td>14</td>
-        <td>15</td>
-        <td>16</td>
-        <td>17</td>
-      </tr>
-      <tr>
-        <th>Odds</th>
-        <td>1:2</td>
-        <td>1:2</td>
-        <td>1:50</td>
-        <td>1:18</td>
-        <td>1:14</td>
-        <td>1:12</td>
-        <td>1:8</td>
-        <td>1:6</td>
-        <td>1:6</td>
-        <td>1:6</td>
-        <td>1:6</td>
-        <td>1:8</td>
-        <td>1:12</td>
-        <td>1:14</td>
-        <td>1:18</td>
-        <td>1:50</td>
-      </tr>
-    </table>
+    <div id="main">
+      <table id="odds-table">
+        <tr>
+          <th>Choice</th>
+          <td>Big</td>
+          <td>Small</td>
+          <td>4</td>
+          <td>5</td>
+          <td>6</td>
+          <td>7</td>
+          <td>8</td>
+          <td>9</td>
+          <td>10</td>
+          <td>11</td>
+          <td>12</td>
+          <td>13</td>
+          <td>14</td>
+          <td>15</td>
+          <td>16</td>
+          <td>17</td>
+        </tr>
+        <tr>
+          <th>Odds</th>
+          <td>1:2</td>
+          <td>1:2</td>
+          <td>1:50</td>
+          <td>1:18</td>
+          <td>1:14</td>
+          <td>1:12</td>
+          <td>1:8</td>
+          <td>1:6</td>
+          <td>1:6</td>
+          <td>1:6</td>
+          <td>1:6</td>
+          <td>1:8</td>
+          <td>1:12</td>
+          <td>1:14</td>
+          <td>1:18</td>
+          <td>1:50</td>
+        </tr>
+      </table>
       <div id="container">
         <div id="userinfo">
           <div id="username"></div>
@@ -191,6 +197,9 @@
 
     function placeBet() {
       if (selectedChip && selectedChoice) {
+        game.getPercentages();
+        game.getSums();
+
         // Calculate the winning amount based on the odds
         let odds;
         if (selectedChoice === "Big" || selectedChoice === "Small") {
@@ -234,7 +243,7 @@
         if (
           document.getElementById("modal-message").textContent === "You won!"
         ) {
-          alert(winningAmount)
+          alert(winningAmount);
           bet(username, winningAmount + selectedChip); // Add the winning amount
         }
       } else {
@@ -408,11 +417,7 @@
 
     // Create a new instance of the game
     var game = new DiceGame();
-
-    // Call getPercentages every second to keep the record board up to date
-    setInterval(() => game.getPercentages(), 1000);
-
-    // Call getSums every second to keep the displayed sums up to date
-    setInterval(() => game.getSums(), 1000);
+    game.getPercentages();
+    game.getSums();
   </script>
 </html>
