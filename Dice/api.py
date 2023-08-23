@@ -50,6 +50,7 @@ def register():
 def get_all_users():
     if os.path.exists(account_file):
         df = pd.read_csv(account_file)
+        df = df.sort_values('amount', ascending=False)  # Sort the DataFrame
         data = df[['username', 'amount']].to_dict('records')
     else:
         data = []
